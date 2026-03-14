@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starfish</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen">
+    <div class="login-box">
+      <h1 class="logo">Starfish</h1>
+      <form id="login-form">
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+        <button type="submit">Enter</button>
+      </form>
+      <p id="login-error" class="error hidden">Incorrect password</p>
+    </div>
+  </div>
+
+  <!-- Library Screen -->
+  <div id="library-screen" class="screen hidden">
+    <header>
+      <h1 class="logo">Starfish</h1>
+      <button id="logout-btn" class="icon-btn" title="Logout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </header>
+
+    <div id="video-grid" class="video-grid"></div>
+    <p id="empty-msg" class="empty-msg hidden">No videos uploaded yet</p>
+  </div>
+
+  <!-- Video Player Modal -->
+  <div id="player-modal" class="modal hidden">
+    <div class="modal-header">
+      <span id="player-title"></span>
+      <button id="close-player" class="icon-btn" title="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="player-wrapper">
+      <video id="video-player" controls playsinline></video>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

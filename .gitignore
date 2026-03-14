@@ -1,0 +1,4 @@
+node_modules/
+.wrangler/
+scripts/.env
+__pycache__/

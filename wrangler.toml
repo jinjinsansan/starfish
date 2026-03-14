@@ -1,0 +1,7 @@
+name = "starfish"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "./public"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "starfish-videos"
