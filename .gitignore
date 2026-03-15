@@ -1,4 +1,7 @@
 node_modules/
 .wrangler/
+.vercel/
 scripts/.env
+.env
+.env.local
 __pycache__/

@@ -13,6 +13,9 @@
   --text-dim: #888;
   --accent: #8b5cf6;
   --accent-hover: #7c3aed;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #22c55e;
 }
 
 body {
@@ -23,6 +26,7 @@ body {
 }
 
 .hidden { display: none !important; }
+.text-dim { color: var(--text-dim); font-size: 0.85rem; }
 
 /* Login */
 .screen { min-height: 100dvh; }
@@ -89,7 +93,7 @@ body {
 }
 
 .error {
-  color: #ef4444;
+  color: var(--danger);
   margin-top: 12px;
   font-size: 0.875rem;
 }
@@ -105,11 +109,63 @@ header {
   top: 0;
   background: var(--bg);
   z-index: 10;
+  gap: 16px;
 }
 
 header .logo {
   font-size: 1.5rem;
   margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  transition: border-color 0.2s;
+}
+
+.search-box:focus-within {
+  border-color: var(--accent);
+}
+
+.search-box svg {
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.search-box input {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 0.875rem;
+  outline: none;
+  width: 160px;
+}
+
+.sort-select {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--text);
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.sort-select option {
+  background: var(--surface);
 }
 
 .icon-btn {
@@ -122,11 +178,50 @@ header .logo {
   transition: color 0.2s, background 0.2s;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .icon-btn:hover {
   color: var(--text);
   background: var(--surface);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 24px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.breadcrumb-item:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.breadcrumb-item.active {
+  color: var(--text);
+  cursor: default;
+}
+
+.breadcrumb-item.active:hover {
+  background: none;
+}
+
+.breadcrumb-sep {
+  color: var(--border);
+  user-select: none;
 }
 
 /* Video Grid */
@@ -141,12 +236,10 @@ header .logo {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  overflow: hidden;
+  position: relative;
 }
 
 .video-card:hover {
@@ -154,8 +247,39 @@ header .logo {
   border-color: var(--accent);
 }
 
-.play-icon {
-  flex-shrink: 0;
+.card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-thumb .play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.video-card:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-circle {
   width: 48px;
   height: 48px;
   background: var(--accent);
@@ -165,26 +289,87 @@ header .logo {
   justify-content: center;
 }
 
-.play-icon svg {
-  margin-left: 2px;
+.play-circle svg {
+  margin-left: 3px;
+}
+
+.card-body {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .video-info {
   overflow: hidden;
+  flex: 1;
 }
 
 .video-name {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.video-size {
+.video-meta {
   color: var(--text-dim);
-  font-size: 0.8rem;
-  margin-top: 4px;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+}
+
+.video-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Folder card */
+.folder-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.folder-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+.folder-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.folder-name {
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .empty-msg {
@@ -194,7 +379,7 @@ header .logo {
   font-size: 1.1rem;
 }
 
-/* Player Modal */
+/* Modals */
 .modal {
   position: fixed;
   inset: 0;
@@ -230,16 +415,199 @@ header .logo {
   background: #000;
 }
 
+/* Upload Modal */
+.upload-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  color: var(--text-dim);
+  position: relative;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+  border-color: var(--accent);
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.drop-zone svg {
+  margin-bottom: 12px;
+}
+
+.drop-zone p {
+  margin-top: 4px;
+}
+
+.drop-zone input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.upload-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.upload-item-name {
+  font-weight: 500;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-item-status {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.upload-item-status.done {
+  color: var(--success);
+}
+
+.upload-item-status.error {
+  color: var(--danger);
+}
+
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s;
+  width: 0%;
+}
+
+.progress-fill.done {
+  background: var(--success);
+}
+
+/* Confirm Dialog */
+.confirm-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.confirm-box p {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-secondary {
+  background: var(--surface-hover);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 640px) {
+  header {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
   .video-grid {
     grid-template-columns: 1fr;
     padding: 16px;
     gap: 12px;
   }
 
-  header {
-    padding: 12px 16px;
+  .breadcrumb {
+    padding: 10px 16px;
   }
 
   .modal-header {
@@ -248,5 +616,9 @@ header .logo {
 
   .player-wrapper {
     padding: 8px;
+  }
+
+  .upload-body {
+    padding: 16px;
   }
 }

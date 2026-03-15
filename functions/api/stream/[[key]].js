@@ -9,7 +9,7 @@ const CONTENT_TYPES = {
 };
 
 export async function onRequestGet(context) {
-  const key = decodeURIComponent(context.params.key);
+  const key = context.params.key.map(decodeURIComponent).join('/');
   const rangeHeader = context.request.headers.get('Range');
 
   // Get object metadata first for range calculations

@@ -1,5 +1,6 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
+  const method = context.request.method;
 
   // Auth endpoint is public
   if (url.pathname === '/api/auth') {
@@ -17,6 +18,16 @@ export async function onRequest(context) {
   const expected = await generateToken(context.env.AUTH_SECRET);
   if (token !== expected) {
     return new Response('Unauthorized', { status: 401 });
+  }
+
+  // CSRF verification for state-changing methods
+  if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+    const csrfCookie = cookie.match(/(?:^|;\s*)csrf=([^;]*)/)?.[1];
+    const csrfHeader = context.request.headers.get('X-CSRF-Token');
+
+    if (!csrfCookie || !csrfHeader || csrfCookie !== csrfHeader) {
+      return new Response('CSRF validation failed', { status: 403 });
+    }
   }
 
   return context.next();
